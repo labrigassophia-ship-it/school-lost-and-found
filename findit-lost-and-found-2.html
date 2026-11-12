@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#173b32">
+<title>FindIt | School Lost & Found</title>
+<style>
+:root{--green:#173b32;--green2:#245747;--mint:#e9f2ed;--cream:#f7f8f5;--ink:#1e2b25;--muted:#68756e;--line:#e2e8e3;--gold:#e6b85c}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+header{background:var(--green);color:white;padding:18px 20px 28px}
+nav,.wrap{max-width:1050px;margin:auto}nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;font-size:21px;letter-spacing:.2px}.brand span{color:var(--gold)}
+nav small{color:#d4e3db;font-size:12px}
+.hero{max-width:1050px;margin:28px auto 0}.eyebrow{color:#c7ddcf;text-transform:uppercase;font-size:11px;font-weight:bold;letter-spacing:1.5px}
+h1{font-size:clamp(28px,6vw,43px);line-height:1.08;margin:10px 0}.hero p{color:#d7e4dd;max-width:550px;line-height:1.55;margin:0}
+.wrap{padding:22px 16px 50px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.primary{background:var(--gold);color:#26352d}.secondary{background:white;color:var(--green);border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 22px}
+.stat{background:white;border:1px solid var(--line);border-radius:13px;padding:14px}.stat strong{display:block;font-size:24px;color:var(--green)}.stat span{font-size:12px;color:var(--muted)}
+.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:18px}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap}input,select,textarea{width:100%;padding:12px;border:1px solid #d8e1da;border-radius:9px;background:white;font:inherit;color:var(--ink);font-size:14px}
+.searchrow input{flex:2;min-width:180px}.searchrow select{flex:1;min-width:130px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:24px 0 12px}.sectionhead h2{font-size:19px;margin:0}.sectionhead span{font-size:12px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:13px}
+.item{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:205px}
+.itemtop{display:flex;justify-content:space-between;gap:8px;align-items:center}.tag{font-size:11px;font-weight:700;border-radius:30px;padding:6px 9px;background:var(--mint);color:var(--green)}.status{font-size:11px;font-weight:700;color:#76521a;background:#fff2d8;padding:6px 9px;border-radius:30px}
+.item h3{font-size:17px;margin:0}.item p{font-size:13px;color:var(--muted);line-height:1.45;margin:0}.meta{font-size:12px;color:var(--muted);margin-top:auto}.itembuttons{display:flex;gap:8px}.itembuttons button{padding:9px 10px;font-size:12px;flex:1}.empty{padding:35px;text-align:center;color:var(--muted);background:white;border:1px dashed #cbd7ce;border-radius:14px}
+.notice{font-size:12px;color:var(--muted);line-height:1.5;margin-top:18px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
+dialog{border:0;border-radius:16px;padding:0;width:min(94%,480px);box-shadow:0 20px 60px #10251b44}dialog::backdrop{background:#10251b88}.modal{padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modalhead h2{font-size:20px;margin:0}.close{background:#eef2ee;color:var(--ink);padding:8px 11px}
+form{display:grid;gap:12px}label{font-size:12px;font-weight:700;color:#43534a;display:grid;gap:6px}.formbuttons{display:flex;gap:9px;margin-top:5px}.formbuttons button{flex:1}
+@media(max-width:480px){.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:21px}.stat span{font-size:10px}.hero{margin-top:22px}}
+</style>
+</head>
+<body>
+<header>
+  <nav><div class="brand">Find<span>It.</span></div><small>School Lost & Found</small></nav>
+  <div class="hero">
+    <div class="eyebrow">A little help goes a long way</div>
+    <h1>Lost something?<br>Let's find it.</h1>
+    <p>A simple place for students and school staff to post lost or found belongings and help return them to their owners.</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="actions">
+    <button class="primary" id="lostBtn">＋ Report lost item</button>
+    <button class="secondary" id="foundBtn">＋ Report found item</button>
+  </div>
+  <section class="stats" aria-label="Item counts">
+    <div class="stat"><strong id="totalCount">0</strong><span>All reports</span></div>
+    <div class="stat"><strong id="lostCount">0</strong><span>Lost items</span></div>
+    <div class="stat"><strong id="foundCount">0</strong><span>Found items</span></div>
+  </section>
+  <section class="panel">
+    <div class="searchrow">
+      <input id="search" type="search" placeholder="Search item, place, or description..." aria-label="Search reports">
+      <select id="filter" aria-label="Filter reports">
+        <option value="all">All reports</option><option value="lost">Lost items</option><option value="found">Found items</option><option value="returned">Returned items</option>
+      </select>
+    </div>
+  </section>
+  <div class="sectionhead"><h2>Recent reports</h2><span id="resultCount">0 reports</span></div>
+  <section class="cards" id="cards"></section>
+  <p class="notice"><strong>Safety reminder:</strong> Do not post passwords, home addresses, or sensitive personal information. Arrange item collection through a teacher or the school office. Ask the claimant to describe the item before handing it over.</p>
+</main>
+<footer>FindIt. · School Lost & Found</footer>
+
+<dialog id="reportDialog">
+ <div class="modal">
+  <div class="modalhead"><h2 id="dialogTitle">Report an item</h2><button class="close" type="button" id="closeDialog">✕</button></div>
+  <form id="reportForm">
+   <input type="hidden" id="itemType">
+   <label>Item name<input id="itemName" maxlength="60" required placeholder="e.g. Blue water bottle"></label>
+   <label>Category<select id="category" required><option value="">Choose a category</option><option>School supplies</option><option>Electronics</option><option>Clothing</option><option>Accessories</option><option>Water bottle / lunch box</option><option>Other</option></select></label>
+   <label>Description<input id="description" maxlength="180" required placeholder="Color, brand, or identifying details"></label>
+   <label>Where was it lost or found?<input id="place" maxlength="80" required placeholder="e.g. School library"></label>
+   <label>Date<input id="date" type="date" required></label>
+   <label>Contact name or school office reference <input id="contact" maxlength="60" placeholder="Optional — avoid private contact details"></label>
+   <div class="formbuttons"><button class="secondary" type="button" id="cancelDialog">Cancel</button><button class="primary" type="submit">Post report</button></div>
+  </form>
+ </div>
+</dialog>
+<script>
+const KEY='findit_school_reports_v1';
+let reports=[];
+try{reports=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(reports))reports=[];}catch(e){reports=[];}
+const $=id=>document.getElementById(id);
+const dialog=$('reportDialog');
+function save(){try{localStorage.setItem(KEY,JSON.stringify(reports));}catch(e){alert('Storage is full on this device. Please remove some reports.');}}
+function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function openForm(type){$('reportForm').reset();$('itemType').value=type;$('dialogTitle').textContent=type==='lost'?'Report a lost item':'Report a found item';$('date').value=new Date().toISOString().slice(0,10);dialog.showModal();}
+$('lostBtn').onclick=()=>openForm('lost');$('foundBtn').onclick=()=>openForm('found');
+$('closeDialog').onclick=$('cancelDialog').onclick=()=>dialog.close();
+$('reportForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const report={id:Date.now().toString(),type:$('itemType').value,name:$('itemName').value.trim(),category:$('category').value,description:$('description').value.trim(),place:$('place').value.trim(),date:$('date').value,contact:$('contact').value.trim(),status:'active'};
+ reports.unshift(report);save();dialog.close();render();
+});
+function render(){
+ const q=$('search').value.trim().toLowerCase(),f=$('filter').value;
+ const shown=reports.filter(r=>(f==='all'||(f==='returned'?r.status==='returned':r.type===f))&&[r.name,r.category,r.description,r.place].join(' ').toLowerCase().includes(q));
+ $('totalCount').textContent=reports.length;$('lostCount').textContent=reports.filter(r=>r.type==='lost'&&r.status!=='returned').length;$('foundCount').textContent=reports.filter(r=>r.type==='found'&&r.status!=='returned').length;$('resultCount').textContent=shown.length+' report'+(shown.length===1?'':'s');
+ if(!shown.length){$('cards').innerHTML='<div class="empty">No reports found.<br>Try another search or add a new report.</div>';return;}
+ $('cards').innerHTML=shown.map(r=>`<article class="item">
+  <div class="itemtop"><span class="tag">${r.type==='lost'?'LOST ITEM':'FOUND ITEM'}</span><span class="status">${r.status==='returned'?'Returned':'Open'}</span></div>
+  <h3>${escapeHTML(r.name)}</h3><p>${escapeHTML(r.description)}</p>
+  <div class="meta">${escapeHTML(r.category)} · ${escapeHTML(r.place)}<br>${escapeHTML(r.date)}${r.contact?' · '+escapeHTML(r.contact):''}</div>
+  <div class="itembuttons">${r.status!=='returned'?`<button class="secondary" data-return="${r.id}">Mark returned</button>`:''}<button class="secondary" data-delete="${r.id}">Delete</button></div>
+ </article>`).join('');
+ document.querySelectorAll('[data-return]').forEach(b=>b.onclick=()=>{const r=reports.find(x=>x.id===b.dataset.return);if(r){r.status='returned';save();render();}});
+ document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{if(confirm('Delete this report from this device?')){reports=reports.filter(x=>x.id!==b.dataset.delete);save();render();}});
+}
+$('search').addEventListener('input',render);$('filter').addEventListener('change',render);render();
+</script>
+</body>
+</html>
